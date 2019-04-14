@@ -32,24 +32,31 @@ class PaymentService {
     }
 
     List<Payment> findPaymentsForCurrentMonth() {
+//        return paymentRepository.findAll()
+//                .stream()
+//                .filter(payment -> payment.getPaymentDate().getYear() == (LocalDate.now().getYear()))
+//                .filter(payment -> payment.getPaymentDate().getMonth() == (LocalDate.now().getMonth()))
+//                .collect(Collectors.toList());
+
         return paymentRepository.findAll()
                 .stream()
-                .filter(payment -> payment.getPaymentDate().getYear() == (LocalDate.now().getYear()))
-                .filter(payment -> payment.getPaymentDate().getMonth() == (LocalDate.now().getMonth()))
+                .filter(payment -> payment.getPaymentDate().getYear() == (dateTimeProvider.zonedDateTimeNow().getYear()))
+                .filter(payment -> payment.getPaymentDate().getMonth() == (dateTimeProvider.zonedDateTimeNow().getMonth()))
                 .collect(Collectors.toList());
+
     }
 
     List<Payment> findPaymentsForGivenMonth(YearMonth yearMonth) {
         return paymentRepository.findAll()
                 .stream()
-                .filter(payment -> payment.getPaymentDate().getYear() == (yearMonth.getYear()))
-                .filter(payment -> payment.getPaymentDate().getMonth().equals(yearMonth.getMonth()))
+                .filter(payment -> payment.getPaymentDate().getYear() == (dateTimeProvider.zonedDateTimeNow().getYear()))
+                .filter(payment -> payment.getPaymentDate().getMonth().equals(dateTimeProvider.zonedDateTimeNow().getMonth()))
                 .collect(Collectors.toList());
     }
 
     List<Payment> findPaymentsForGivenLastDays(int days) {
         Long d = Long.valueOf(days);
-        ZonedDateTime dateTime1 = ZonedDateTime.now();
+        ZonedDateTime dateTime1 = dateTimeProvider.zonedDateTimeNow();
         return paymentRepository.findAll()
                 .stream()
                 .filter(payment -> payment.getPaymentDate().compareTo(dateTime1.minusDays(d)) > 0)
@@ -68,8 +75,8 @@ class PaymentService {
 
         return paymentRepository.findAll()
                 .stream()
-                .filter(payment -> payment.getPaymentDate().getYear() == (LocalDate.now().getYear()))
-                .filter(payment -> payment.getPaymentDate().getMonth().equals(LocalDate.now().getMonth()))
+                .filter(payment -> payment.getPaymentDate().getYear() == (dateTimeProvider.zonedDateTimeNow().getYear()))
+                .filter(payment -> payment.getPaymentDate().getMonth().equals(dateTimeProvider.zonedDateTimeNow().getMonth()))
                 .map(payment -> payment.getPaymentItems())
                 .flatMap(paymentItems -> paymentItems.stream())
                 .map(paymentItem -> paymentItem.getName())
@@ -140,7 +147,7 @@ class PaymentService {
 //                .collect(Collectors.toSet());
 //        paymentRepository.findAll()
 //
-          
+
 
 
 
